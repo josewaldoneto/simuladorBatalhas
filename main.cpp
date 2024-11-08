@@ -55,8 +55,8 @@ public:
 int main() {
     std::srand(std::time(0));
 
-    Heroi heroi1("AquaMan", 75);
-    Heroi heroi2("ElectricMan", 80);
+    Heroi heroi1("Homelander", 100);
+    Heroi heroi2("Homelander reverso", 50);
 
     SimuladorBatalha::simularBatalha(heroi1, heroi2);
 
