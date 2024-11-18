@@ -3,7 +3,7 @@
 ## TO-DO
 - [X] Adicionar influencia de 'Popularidade' nas batalhas
 - [X] Adicionar 'Relatório'
-- [ ] Adicionar mais fatores aleatórios (?)
+- [X] Adicionar mais fatores aleatórios (?)
 - [ ] Adicionar fatores estratégicos (?)
 - [ ] Adicionar ambientes (?)
 - [ ] Adicionar integração com banco de dados

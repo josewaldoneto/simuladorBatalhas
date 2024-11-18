@@ -53,7 +53,7 @@ func (sb SimuladorBatalha) simularBatalha(heroi1, heroi2 Heroi) {
 	criticoHeroi1 := false
 	criticoHeroi2 := false
 
-	// Adiciona o impacto de acerto crítico (10% a mais de força no ataque crítico)
+	// Adiciona o impacto de acerto crítico
 	if rand.Float64()*100 < chanceCriticoHeroi1 {
 		criticoHeroi1 = true
 		forcaFinalHeroi1 += 20 // Aumenta a força com um bônus de crítico
@@ -64,7 +64,7 @@ func (sb SimuladorBatalha) simularBatalha(heroi1, heroi2 Heroi) {
 		forcaFinalHeroi2 += 20 // Aumenta a força com um bônus de crítico
 	}
 
-	// Inicializa fatores aleatórios (20% de chance)
+	// Inicializa fatores aleatórios
 	fatorAleatorioHeroi1 := 0
 	fatorAleatorioHeroi2 := 0
 
@@ -78,10 +78,6 @@ func (sb SimuladorBatalha) simularBatalha(heroi1, heroi2 Heroi) {
 		forcaFinalHeroi2 += fatorAleatorioHeroi2
 	}
 
-	// Calcula a probabilidade de vitória do herói 1
-	forcaTotal := forcaFinalHeroi1 + forcaFinalHeroi2
-	chanceHeroi1 := float64(forcaFinalHeroi1) / float64(forcaTotal)
-
 	// Calcula a moral temporária com base nas forças relativas
 	moralHeroi1 := sb.calculaMoral(forcaFinalHeroi1, forcaFinalHeroi2)
 	moralHeroi2 := sb.calculaMoral(forcaFinalHeroi2, forcaFinalHeroi1)
@@ -89,6 +85,10 @@ func (sb SimuladorBatalha) simularBatalha(heroi1, heroi2 Heroi) {
 	// Aplica a moral no cálculo final da força
 	forcaFinalHeroi1 += moralHeroi1
 	forcaFinalHeroi2 += moralHeroi2
+
+	// Calcula a probabilidade de vitória do herói 1
+	forcaTotal := forcaFinalHeroi1 + forcaFinalHeroi2
+	chanceHeroi1 := float64(forcaFinalHeroi1) / float64(forcaTotal)
 
 	fmt.Printf("%s força final: %d (força: %d, popularidade: %d)\n", heroi1.nome, forcaFinalHeroi1, heroi1.forca, heroi1.popularidade)
 	fmt.Printf("%s força final: %d (força: %d, popularidade: %d)\n", heroi2.nome, forcaFinalHeroi2, heroi2.forca, heroi2.popularidade)
