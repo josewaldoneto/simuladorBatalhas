@@ -16,13 +16,25 @@ type Heroi struct {
 type SimuladorBatalha struct{}
 
 // chanceDeAcertoCritico calcula a chance de acerto crítico com base na popularidade do herói
-func chanceDeAcertoCritico(popularidade int) float64 {
+func (sb SimuladorBatalha) chanceDeAcertoCritico(popularidade int) float64 {
 	// A chance de acerto crítico é proporcional à popularidade (máximo de 50%)
 	chance := float64(popularidade) / 2.0
 	if chance > 50 {
 		chance = 50 // Limita a chance de crítico a 50%
 	}
 	return chance
+}
+
+// calculaMoral ajusta a moral com base na diferença de força durante a batalha
+func (sb SimuladorBatalha) calculaMoral(forcaHeroi1, forcaHeroi2 int) int {
+	// Se o herói 1 está ganhando, sua moral aumenta
+	moral := 0
+	if forcaHeroi1 > forcaHeroi2 {
+		moral = 5
+	} else if forcaHeroi2 > forcaHeroi1 {
+		moral = -5
+	}
+	return moral
 }
 
 // simularBatalha realiza a simulação da batalha entre dois heróis
@@ -34,8 +46,8 @@ func (sb SimuladorBatalha) simularBatalha(heroi1, heroi2 Heroi) {
 	forcaFinalHeroi2 := heroi2.forca + (heroi2.popularidade / 2)
 
 	// Verifica a chance de acerto crítico para cada herói
-	chanceCriticoHeroi1 := chanceDeAcertoCritico(heroi1.popularidade)
-	chanceCriticoHeroi2 := chanceDeAcertoCritico(heroi2.popularidade)
+	chanceCriticoHeroi1 := sb.chanceDeAcertoCritico(heroi1.popularidade)
+	chanceCriticoHeroi2 := sb.chanceDeAcertoCritico(heroi2.popularidade)
 
 	// Variáveis para registrar se o herói teve um acerto crítico
 	criticoHeroi1 := false
@@ -70,6 +82,14 @@ func (sb SimuladorBatalha) simularBatalha(heroi1, heroi2 Heroi) {
 	forcaTotal := forcaFinalHeroi1 + forcaFinalHeroi2
 	chanceHeroi1 := float64(forcaFinalHeroi1) / float64(forcaTotal)
 
+	// Calcula a moral temporária com base nas forças relativas
+	moralHeroi1 := sb.calculaMoral(forcaFinalHeroi1, forcaFinalHeroi2)
+	moralHeroi2 := sb.calculaMoral(forcaFinalHeroi2, forcaFinalHeroi1)
+
+	// Aplica a moral no cálculo final da força
+	forcaFinalHeroi1 += moralHeroi1
+	forcaFinalHeroi2 += moralHeroi2
+
 	fmt.Printf("%s força final: %d (força: %d, popularidade: %d)\n", heroi1.nome, forcaFinalHeroi1, heroi1.forca, heroi1.popularidade)
 	fmt.Printf("%s força final: %d (força: %d, popularidade: %d)\n", heroi2.nome, forcaFinalHeroi2, heroi2.forca, heroi2.popularidade)
 
@@ -97,6 +117,7 @@ func (sb SimuladorBatalha) simularBatalha(heroi1, heroi2 Heroi) {
 	if criticoHeroi1 {
 		fmt.Printf("  Acerto Crítico: SIM (+15 de força)\n")
 	}
+	fmt.Printf("  Moral durante a luta: %+d (ajuste de força)\n", moralHeroi1)
 	fmt.Printf("  Força final: %d\n", forcaFinalHeroi1)
 
 	// Relatório do Herói 2
@@ -107,10 +128,9 @@ func (sb SimuladorBatalha) simularBatalha(heroi1, heroi2 Heroi) {
 	if criticoHeroi2 {
 		fmt.Printf("  Acerto Crítico: SIM (+15 de força)\n")
 	}
+	fmt.Printf("  Moral durante a luta: %+d (ajuste de força)\n", moralHeroi2)
 	fmt.Printf("  Força final: %d\n", forcaFinalHeroi2)
 	fmt.Println("\nImpacto da Batalha:")
-	fmt.Printf("%s: Popularidade %+d, Força %+d\n", vencedor.nome, 5, 2)
-	fmt.Printf("%s: Popularidade %+d, Força %+d\n", perdedor.nome, -3, -1)
 }
 
 func main() {
