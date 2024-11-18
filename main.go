@@ -5,10 +5,11 @@ import (
 	"math/rand"
 )
 
-// Heroi representa um herói com nome e força
+// Heroi representa um herói com nome, força e popularidade
 type Heroi struct {
-	nome  string
-	forca int
+	nome         string
+	forca        int
+	popularidade int
 }
 
 // SimuladorBatalha simula uma batalha entre dois heróis
@@ -19,8 +20,8 @@ func (sb SimuladorBatalha) simularBatalha(heroi1, heroi2 Heroi) {
 	fmt.Printf("Iniciando batalha entre %s e %s!\n", heroi1.nome, heroi2.nome)
 
 	// Força final de cada herói será a força inicial mais todos os outros fatores
-	forcaFinalHeroi1 := heroi1.forca
-	forcaFinalHeroi2 := heroi2.forca
+	forcaFinalHeroi1 := heroi1.forca + (heroi1.popularidade / 2)
+	forcaFinalHeroi2 := heroi2.forca + (heroi2.popularidade / 2)
 
 	if rand.Intn(10) < 2 {
 		forcaFinalHeroi1 += 15
@@ -33,8 +34,8 @@ func (sb SimuladorBatalha) simularBatalha(heroi1, heroi2 Heroi) {
 	forcaTotal := forcaFinalHeroi1 + forcaFinalHeroi2
 	chanceHeroi1 := float64(forcaFinalHeroi1) / float64(forcaTotal)
 
-	fmt.Printf("%s força final: %d\n", heroi1.nome, forcaFinalHeroi1)
-	fmt.Printf("%s força final: %d\n", heroi2.nome, forcaFinalHeroi2)
+	fmt.Printf("%s força final: %d (força: %d, popularidade: %d)\n", heroi1.nome, forcaFinalHeroi1, heroi1.forca, heroi1.popularidade)
+	fmt.Printf("%s força final: %d (força: %d, popularidade: %d)\n", heroi2.nome, forcaFinalHeroi2, heroi2.forca, heroi2.popularidade)
 
 	// Determinação do vencedor
 	if rand.Float64() < chanceHeroi1 {
@@ -45,8 +46,8 @@ func (sb SimuladorBatalha) simularBatalha(heroi1, heroi2 Heroi) {
 }
 
 func main() {
-	heroi1 := Heroi{nome: "Homelander", forca: 100}
-	heroi2 := Heroi{nome: "Homelander reverso", forca: 50}
+	heroi1 := Heroi{nome: "Homelander", forca: 100, popularidade: 80}
+	heroi2 := Heroi{nome: "Homelander reverso", forca: 50, popularidade: 40}
 
 	simulador := SimuladorBatalha{}
 	simulador.simularBatalha(heroi1, heroi2)
