@@ -15,6 +15,16 @@ type Heroi struct {
 // SimuladorBatalha simula uma batalha entre dois heróis
 type SimuladorBatalha struct{}
 
+// chanceDeAcertoCritico calcula a chance de acerto crítico com base na popularidade do herói
+func chanceDeAcertoCritico(popularidade int) float64 {
+	// A chance de acerto crítico é proporcional à popularidade (máximo de 50%)
+	chance := float64(popularidade) / 2.0
+	if chance > 50 {
+		chance = 50 // Limita a chance de crítico a 50%
+	}
+	return chance
+}
+
 // simularBatalha realiza a simulação da batalha entre dois heróis
 func (sb SimuladorBatalha) simularBatalha(heroi1, heroi2 Heroi) {
 	fmt.Printf("Iniciando batalha entre %s e %s!\n", heroi1.nome, heroi2.nome)
@@ -23,7 +33,26 @@ func (sb SimuladorBatalha) simularBatalha(heroi1, heroi2 Heroi) {
 	forcaFinalHeroi1 := heroi1.forca + (heroi1.popularidade / 2)
 	forcaFinalHeroi2 := heroi2.forca + (heroi2.popularidade / 2)
 
-	// Inicializa fatores aleatórios
+	// Verifica a chance de acerto crítico para cada herói
+	chanceCriticoHeroi1 := chanceDeAcertoCritico(heroi1.popularidade)
+	chanceCriticoHeroi2 := chanceDeAcertoCritico(heroi2.popularidade)
+
+	// Variáveis para registrar se o herói teve um acerto crítico
+	criticoHeroi1 := false
+	criticoHeroi2 := false
+
+	// Adiciona o impacto de acerto crítico (10% a mais de força no ataque crítico)
+	if rand.Float64()*100 < chanceCriticoHeroi1 {
+		criticoHeroi1 = true
+		forcaFinalHeroi1 += 20 // Aumenta a força com um bônus de crítico
+	}
+
+	if rand.Float64()*100 < chanceCriticoHeroi2 {
+		criticoHeroi2 = true
+		forcaFinalHeroi2 += 20 // Aumenta a força com um bônus de crítico
+	}
+
+	// Inicializa fatores aleatórios (20% de chance)
 	fatorAleatorioHeroi1 := 0
 	fatorAleatorioHeroi2 := 0
 
@@ -59,15 +88,25 @@ func (sb SimuladorBatalha) simularBatalha(heroi1, heroi2 Heroi) {
 	fmt.Printf("Vencedor: %s\n", vencedor.nome)
 	fmt.Printf("Perdedor: %s\n", perdedor.nome)
 	fmt.Println("\nDesempenho dos Heróis:")
+
+	// Relatório do Herói 1
 	fmt.Printf("%s:\n", heroi1.nome)
 	fmt.Printf("  Força inicial: %d\n", heroi1.forca)
 	fmt.Printf("  Popularidade: %d (impacto na força: +%d)\n", heroi1.popularidade, heroi1.popularidade/2)
 	fmt.Printf("  Fator aleatório: +%d\n", fatorAleatorioHeroi1)
+	if criticoHeroi1 {
+		fmt.Printf("  Acerto Crítico: SIM (+15 de força)\n")
+	}
 	fmt.Printf("  Força final: %d\n", forcaFinalHeroi1)
+
+	// Relatório do Herói 2
 	fmt.Printf("%s:\n", heroi2.nome)
 	fmt.Printf("  Força inicial: %d\n", heroi2.forca)
 	fmt.Printf("  Popularidade: %d (impacto na força: +%d)\n", heroi2.popularidade, heroi2.popularidade/2)
 	fmt.Printf("  Fator aleatório: +%d\n", fatorAleatorioHeroi2)
+	if criticoHeroi2 {
+		fmt.Printf("  Acerto Crítico: SIM (+15 de força)\n")
+	}
 	fmt.Printf("  Força final: %d\n", forcaFinalHeroi2)
 	fmt.Println("\nImpacto da Batalha:")
 	fmt.Printf("%s: Popularidade %+d, Força %+d\n", vencedor.nome, 5, 2)
@@ -75,9 +114,11 @@ func (sb SimuladorBatalha) simularBatalha(heroi1, heroi2 Heroi) {
 }
 
 func main() {
+	// Criação dos heróis com diferentes popularidades
 	heroi1 := Heroi{nome: "Homelander", forca: 100, popularidade: 80}
 	heroi2 := Heroi{nome: "Homelander reverso", forca: 50, popularidade: 40}
 
+	// Simulação da batalha
 	simulador := SimuladorBatalha{}
 	simulador.simularBatalha(heroi1, heroi2)
 }
