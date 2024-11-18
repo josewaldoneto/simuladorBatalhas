@@ -1,8 +1,8 @@
 # Simulador de batalhas
 
 ## TO-DO
-- [ ] Adicionar influencia de 'Popularidade' nas batalhas
-- [ ] Adicionar 'Relatório'
+- [X] Adicionar influencia de 'Popularidade' nas batalhas
+- [X] Adicionar 'Relatório'
 - [ ] Adicionar mais fatores aleatórios (?)
 - [ ] Adicionar fatores estratégicos (?)
 - [ ] Adicionar ambientes (?)
