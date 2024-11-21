@@ -11,3 +11,11 @@
 
 ## Relatório:
 O sistema deve exibir um relatório completo da batalha, incluindo o desempenho de cada herói e o impacto na popularidade e força.
+
+```json
+{
+    "heroi1": int,
+    "heroi2": "int",
+    "impacto": "string" // "vitória" ou "derrota"
+}
+```
