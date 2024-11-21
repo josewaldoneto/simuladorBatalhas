@@ -16,6 +16,6 @@ O sistema deve exibir um relatório completo da batalha, incluindo o desempenho 
 {
     "heroi1": int,
     "heroi2": "int",
-    "impacto": "string" // "vitória" ou "derrota"
+    "impacto": " string "vitória" ou "derrota" "
 }
 ```
